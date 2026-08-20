@@ -31,6 +31,14 @@
           }
         }
       }
+    },
+    "teacherBoards": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === 'Z6WEsEFSTBbq6eeIF3E0RaBGoQZ2' && auth.uid === $uid",
+        "$room": {
+          ".write": "auth != null && auth.uid === 'Z6WEsEFSTBbq6eeIF3E0RaBGoQZ2' && auth.uid === $uid"
+        }
+      }
     }
   }
 }
