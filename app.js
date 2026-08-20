@@ -12,6 +12,7 @@ const COLOR_OPTIONS = [
   })
 ];
 const ROOM_ID = new URLSearchParams(location.search).get("room")?.trim();
+const TEST_MODE = new URLSearchParams(location.search).get("test")==="17";
 const TEACHER_UID = "Z6WEsEFSTBbq6eeIF3E0RaBGoQZ2";
 const MAX_POSTS=3, MAX_LENGTH=80, MAX_QUESTIONS=5;
 const appEl=document.querySelector("#app");
@@ -20,6 +21,7 @@ let selectedColor=null, teacher=false, selectedPost=null;
 let demoScene="wall";
 let demoColorId=2, demoQuestionCount=2, demoShowAttendance=false, demoPresentPost="c";
 let demoJoinCode="";
+let testRevealId=null;
 
 function esc(s=""){return String(s).replace(/[&<>\"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));}
 function sessionKey(){return `summer-colors-${ROOM_ID}`;}
@@ -35,6 +37,7 @@ function roomUrl(id){return `${location.pathname}?room=${encodeURIComponent(id)}
 
 async function boot(){
   try {
+    if(TEST_MODE) return renderTestWall();
     const {firebaseConfig}=await import("./firebase-config.js");
     if(!firebaseConfig?.apiKey) throw new Error("config");
     ({initializeApp}=await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"));
@@ -51,6 +54,15 @@ async function boot(){
     });
     my=loadSession(); render();
   } catch { renderConfig(); }
+}
+function renderTestWall(){
+ const themes=[
+  ['바닷가에서 조개를 주웠어요 🐚','파도 소리가 가장 기억에 남았어요.'],['가족과 함께 수영장에 갔어요 🏊','물 미끄럼틀을 세 번 탔어요.'],['새로운 보드게임을 배웠어요 🎲','처음에는 어려웠지만 마지막에는 이겼어요.'],['할머니와 화채를 만들었어요 🍉','내가 좋아하는 과일을 많이 넣었어요.'],['자전거를 더 멀리 타 봤어요 🚲','넘어지지 않고 공원까지 갔어요.'],['친구와 도서관에 갔어요 📚','재미있는 만화책을 한 권 찾았어요.'],['캠핑장에서 별을 봤어요 ✨','밤하늘에 별이 정말 많았어요.'],['강아지와 산책을 했어요 🐶','강아지가 물웅덩이를 좋아했어요.'],['요리 동영상을 보고 간식을 만들었어요 🍪','모양은 조금 달랐지만 맛있었어요.'],['친척들과 게임을 했어요 🎮','협동해서 마지막 단계를 깼어요.'],['동생과 레고를 만들었어요 🧱','높은 탑을 함께 완성했어요.'],['박물관에서 공룡 뼈를 봤어요 🦕','가장 큰 공룡이 인상 깊었어요.'],['피아노 곡을 한 곡 연습했어요 🎹','어려운 부분을 천천히 연습했어요.'],['아침에 일찍 일어나 산책했어요 🌳','공기가 시원해서 기분이 좋았어요.'],['새 식물을 키우기 시작했어요 🪴','매일 물 주는 시간을 정했어요.'],['영화관에서 영화를 봤어요 🎬','끝나고 가장 재미있던 장면을 이야기했어요.'],['종이접기로 동물을 만들었어요 🦊','여러 색 종이를 섞어 썼어요.']
+ ];
+ const followUps=['어디에서 했어요?','누구와 함께했어요?','가장 재미있었던 순간은 언제예요?','다음에도 하고 싶어요?','어떤 점이 가장 기억에 남아요?'];
+ const posts=themes.flatMap(([main,detail],studentIndex)=>Array.from({length:1+(studentIndex%3)},(_,postIndex)=>({id:`test-${studentIndex}-${postIndex}`,authorColorId:studentIndex,text:postIndex===0?main:postIndex===1?detail:`그때 배운 점은 다음에는 더 준비하고 싶다는 것이에요.`,questionCount:(studentIndex*2+postIndex)%6}))).sort((a,b)=>b.questionCount-a.questionCount||a.id.localeCompare(b.id));
+ shell(`<section class="card"><div class="topbar"><div><div class="step">테스트 장면 · 교사 발표 화면</div><h2>17명이 붙인 ${posts.length}장의 포스트잇</h2></div><span class="count">질문 수 많은 순</span></div><p class="notice">실제 Firebase에 저장되지 않는 예시입니다. 포스트잇을 선택하면 해당 학생의 색이 드러나는 발표 장면을 확인할 수 있어요.</p><div class="legend"><span class="tag">참여 17명</span><span class="tag">포스트잇 ${posts.length}장</span><span class="tag">질문 최대 5개 예시</span></div><div class="stickies">${posts.map(p=>{const revealed=testRevealId===p.id;const c=color(p.authorColorId);const questions=followUps.slice(0,p.questionCount);return `<article class="sticky public ${revealed?'selected-post':''}" style="background:${revealed?c.hex:'#fff7a5'}"><p>${esc(p.text)}</p><div class="sticky-meta">❔ 질문 ${p.questionCount}개${revealed?` · ${esc(c.name)}`:''}</div>${questions.length?`<ul class="question-list">${questions.map(q=>`<li>${q}</li>`).join('')}</ul>`:'<p class="muted">아직 질문이 없어요.</p>'}<div class="actions"><button class="btn secondary" data-test-post="${p.id}">${revealed?'발표 색 숨기기':'이 포스트잇 발표하기'}</button></div></article>`}).join('')}</div></section>`);
+ document.querySelectorAll('[data-test-post]').forEach(button=>button.onclick=()=>{testRevealId=testRevealId===button.dataset.testPost?null:button.dataset.testPost;renderTestWall();});
 }
 function renderRoomRequired(){
  shell(`<section class="wall-hero"><div class="wall-copy"><div class="step">우리 반 생각 모으기</div><h2>오늘의 생각으로<br>담벼락을 채워 볼까요?</h2><p>선생님은 새 담벼락을 만들고, 학생은 참여코드로 들어와요.</p><div class="actions"><button class="btn" id="open-teacher-login">교사로 담벼락 만들기</button></div></div><div class="wall-board" aria-label="포스트잇 담벼락"><div class="pin"></div><div class="wall-sticky s1">오늘 기대되는 것<br>한 가지! ✨</div><div class="wall-sticky s2">내가 소개하고 싶은<br>이야기 🌻</div><div class="wall-sticky s3">궁금한 친구의 글에는<br>❔ 질문 남기기</div><div class="wall-sticky s4">생각은 달라도<br>괜찮아요</div></div></section><section class="card join-card"><div class="step">학생 입장</div><h2>참여코드를 입력해 주세요</h2><p>선생님이 칠판이나 화면에 보여 준 참여코드로 들어와요.</p><div class="fields"><label>참여코드 <input id="room-code" maxlength="20" placeholder="예: STICKER-ABC123" autocomplete="off"></label></div><div id="room-code-message"></div><div class="actions"><button class="btn" id="enter-room">담벼락 들어가기</button></div></section>`);
