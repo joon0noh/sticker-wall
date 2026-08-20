@@ -1,6 +1,16 @@
+@font-face { font-family:'A2z'; src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2601-6@1.0/에이투지체-1Thin.woff2') format('woff2'); font-weight:100; font-display:swap; }
+@font-face { font-family:'A2z'; src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2601-6@1.0/에이투지체-2ExtraLight.woff2') format('woff2'); font-weight:200; font-display:swap; }
+@font-face { font-family:'A2z'; src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2601-6@1.0/에이투지체-3Light.woff2') format('woff2'); font-weight:300; font-display:swap; }
+@font-face { font-family:'A2z'; src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2601-6@1.0/에이투지체-4Regular.woff2') format('woff2'); font-weight:400; font-display:swap; }
+@font-face { font-family:'A2z'; src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2601-6@1.0/에이투지체-5Medium.woff2') format('woff2'); font-weight:500; font-display:swap; }
+@font-face { font-family:'A2z'; src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2601-6@1.0/에이투지체-6SemiBold.woff2') format('woff2'); font-weight:600; font-display:swap; }
+@font-face { font-family:'A2z'; src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2601-6@1.0/에이투지체-7Bold.woff2') format('woff2'); font-weight:700; font-display:swap; }
+@font-face { font-family:'A2z'; src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2601-6@1.0/에이투지체-8ExtraBold.woff2') format('woff2'); font-weight:800; font-display:swap; }
+@font-face { font-family:'A2z'; src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2601-6@1.0/에이투지체-9Black.woff2') format('woff2'); font-weight:900; font-display:swap; }
+
 :root { --ink:#222036; --paper:#fffdf7; --lav:#ece7ff; --accent:#5546c7; --quiet:#6c687e; --line:#ded9ee; --shadow:0 8px 24px rgba(55,43,106,.12); }
 * { box-sizing:border-box; }
-body { margin:0; min-height:100vh; color:var(--ink); font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif; background:radial-gradient(circle at 0 0,#fff4cc 0,transparent 30rem),linear-gradient(145deg,#f9f7ff,#e9f7ff); }
+body { margin:0; min-height:100vh; color:var(--ink); font-family:'A2z',system-ui,-apple-system,"Noto Sans KR",sans-serif; background:radial-gradient(circle at 0 0,#fff4cc 0,transparent 30rem),linear-gradient(145deg,#f9f7ff,#e9f7ff); }
 button,input,textarea { font:inherit; }
 button { cursor:pointer; }
 .shell { width:min(960px,calc(100% - 32px)); margin:auto; padding:28px 0 64px; }
