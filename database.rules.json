@@ -3,17 +3,17 @@
     "rooms": {
       "$room": {
         ".read": "auth != null",
-        "phase": { ".write": "auth != null && auth.token.firebase.sign_in_provider != 'anonymous'" },
-        "selectedPostId": { ".write": "auth != null && auth.token.firebase.sign_in_provider != 'anonymous'" },
-        "showAttendance": { ".write": "auth != null && auth.token.firebase.sign_in_provider != 'anonymous'" },
+        "phase": { ".write": "auth != null && auth.uid === 'Z6WEsEFSTBbq6eeIF3E0RaBGoQZ2'" },
+        "selectedPostId": { ".write": "auth != null && auth.uid === 'Z6WEsEFSTBbq6eeIF3E0RaBGoQZ2'" },
+        "showAttendance": { ".write": "auth != null && auth.uid === 'Z6WEsEFSTBbq6eeIF3E0RaBGoQZ2'" },
         "colorLocks": {
           "$color": {
-            ".write": "auth != null && ((!data.exists() && newData.val() === auth.uid) || auth.token.firebase.sign_in_provider != 'anonymous')"
+            ".write": "auth != null && ((!data.exists() && newData.val() === auth.uid) || auth.uid === 'Z6WEsEFSTBbq6eeIF3E0RaBGoQZ2')"
           }
         },
         "posts": {
           "$post": {
-            ".write": "auth != null && ((!data.exists() && newData.child('authorId').val() === auth.uid) || auth.token.firebase.sign_in_provider != 'anonymous')",
+            ".write": "auth != null && ((!data.exists() && newData.child('authorId').val() === auth.uid) || auth.uid === 'Z6WEsEFSTBbq6eeIF3E0RaBGoQZ2')",
             ".validate": "newData.hasChildren(['authorId','authorColorId','text','createdAt'])",
             "questions": { "$question": { ".write": "auth != null && !data.exists()" } }
           }
@@ -23,10 +23,10 @@
     "teacherRecords": {
       "$room": {
         "participants": {
-          ".read": "auth != null && auth.token.firebase.sign_in_provider != 'anonymous'",
+          ".read": "auth != null && auth.uid === 'Z6WEsEFSTBbq6eeIF3E0RaBGoQZ2'",
           "$uid": {
-            ".read": "auth != null && auth.token.firebase.sign_in_provider != 'anonymous'",
-            ".write": "auth != null && (auth.uid === $uid || auth.token.firebase.sign_in_provider != 'anonymous')"
+            ".read": "auth != null && auth.uid === 'Z6WEsEFSTBbq6eeIF3E0RaBGoQZ2'",
+            ".write": "auth != null && (auth.uid === $uid || auth.uid === 'Z6WEsEFSTBbq6eeIF3E0RaBGoQZ2')"
           }
         }
       }
