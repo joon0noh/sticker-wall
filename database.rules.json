@@ -1,0 +1,35 @@
+{
+  "rules": {
+    "rooms": {
+      "$room": {
+        ".read": "auth != null",
+        "phase": { ".write": "auth != null && auth.token.firebase.sign_in_provider != 'anonymous'" },
+        "selectedPostId": { ".write": "auth != null && auth.token.firebase.sign_in_provider != 'anonymous'" },
+        "showAttendance": { ".write": "auth != null && auth.token.firebase.sign_in_provider != 'anonymous'" },
+        "colorLocks": {
+          "$color": {
+            ".write": "auth != null && ((!data.exists() && newData.val() === auth.uid) || auth.token.firebase.sign_in_provider != 'anonymous')"
+          }
+        },
+        "posts": {
+          "$post": {
+            ".write": "auth != null && ((!data.exists() && newData.child('authorId').val() === auth.uid) || auth.token.firebase.sign_in_provider != 'anonymous')",
+            ".validate": "newData.hasChildren(['authorId','authorColorId','text','createdAt'])",
+            "questions": { "$question": { ".write": "auth != null && !data.exists()" } }
+          }
+        }
+      }
+    },
+    "teacherRecords": {
+      "$room": {
+        "participants": {
+          ".read": "auth != null && auth.token.firebase.sign_in_provider != 'anonymous'",
+          "$uid": {
+            ".read": "auth != null && auth.token.firebase.sign_in_provider != 'anonymous'",
+            ".write": "auth != null && (auth.uid === $uid || auth.token.firebase.sign_in_provider != 'anonymous')"
+          }
+        }
+      }
+    }
+  }
+}
