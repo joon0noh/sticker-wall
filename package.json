@@ -1,0 +1,9 @@
+{
+  "name": "summer-colors-classroom",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "serve": "npx serve . -l 4173",
+    "ai-helper": "node ai-helper.js"
+  }
+}
