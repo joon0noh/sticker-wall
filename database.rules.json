@@ -14,7 +14,7 @@
         },
         "posts": {
           "$post": {
-            ".write": "auth != null && ((!data.exists() && newData.child('authorId').val() === auth.uid) || auth.uid === 'Z6WEsEFSTBbq6eeIF3E0RaBGoQZ2')",
+            ".write": "auth != null && ((!data.exists() && newData.child('authorId').val() === auth.uid) || (data.exists() && data.child('authorId').val() === auth.uid && (!newData.exists() || (newData.child('authorId').val() === auth.uid && newData.child('authorColorId').val() === data.child('authorColorId').val()))) || auth.uid === 'Z6WEsEFSTBbq6eeIF3E0RaBGoQZ2')",
             ".validate": "newData.hasChildren(['authorId','authorColorId','text','createdAt'])",
             "questions": { "$question": { ".write": "auth != null && !data.exists()" } }
           }
